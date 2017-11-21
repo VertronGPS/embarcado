@@ -49,8 +49,9 @@ void setup()
     if(started) 
     {
         //Enable this two lines if you want to send an SMS.
-        if (sms.SendSMS("+5587996681305", "Vertron GPS: SMS com Arduino+SIM900 enviado com sucesso!"))
-        Serial.println("\nSMS sent OK");
+        if (sms.SendSMS("+5587996681305", "Vertron GPS: SMS com Arduino+SIM900 enviado com sucesso!")) {
+          Serial.println("\nSMS sent OK");
+        }
        
        //if NO SPACE ,you need delte SMS  from position 1 to position 20
        //please enable this four lines
@@ -77,7 +78,14 @@ void loop()
             // now we have phone number string in phone_num
             Serial.println(phone_number);
             // and SMS text in sms_text
-            Serial.println(sms_text);
+            if(strcmp (sms_text,"ping") == 0) {
+              if (sms.SendSMS("+5587996681305", "ok")) {
+                Serial.println("\nSMS sent OK");
+              }
+            } else {
+              Serial.println(sms_text);  
+            }
+            
         }   
         else
         {
