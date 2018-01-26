@@ -1,19 +1,71 @@
+#include "SIM900.h"
 #include <SoftwareSerial.h>
 #include <TinyGPS.h>
 
-SoftwareSerial serial1(10, 11); // RX, TX
+#include "sms.h"
+SMSGSM sms;
+
+SoftwareSerial serial1(5, 6); // RX, TX
 TinyGPS gps1;
+
+//Simple sketch to send and receive SMS.
+  
+int numdata;
+boolean started=false;
+char smsbuffer[160];
+char n[20];
+  
+//debug begin
+char sms_position;
+char phone_number[20]; // array for the phone number string
+char sms_text[100];
+int i;
+//debug end
 
 void setup() {
    serial1.begin(9600);
    Serial.begin(9600);
 
-   Serial.println("Aguradando o sinal dos satelites...");
+
+   Serial.println("Inciciando shield GSM/GPRS...");
+
+   Serial.println("GSM Shield testing.");
+      //Start configuration of shield with baudrate.
+      //For http uses is raccomanded to use 4800 or slower.
+      if (gsm.begin(9600)) 
+      {
+          Serial.println("\nstatus=READY");
+          started=true;
+      } 
+      else 
+          Serial.println("\nstatus=IDLE");
+  
+      if(started) 
+      {
+          //Enable this two lines if you want to send an SMS.
+          if (sms.SendSMS("+5587996681305", "Vertron GPS: SMS com Arduino+SIM900 enviado com sucesso!")) {
+            Serial.println("\nSMS sent OK");
+          }
+         
+         //if NO SPACE ,you need delte SMS  from position 1 to position 20
+         //please enable this four lines
+         //for(i=1;i<=20;i++)
+         //{
+             //sms.DeleteSMS(i);
+         //}
+
+        Serial.println("Shield GSM/GPRS iniciada com sucesso...");
+         
+      }
+   
+   Serial.println("Aguardando o sinal dos satelites...");
 }
 
 void loop() {
   bool recebido = false;
 
+  Serial.println("Tentando receber sinal: ");
+  
   while (serial1.available()) {
      char cIn = serial1.read();
      recebido = gps1.encode(cIn);
@@ -111,11 +163,11 @@ void loop() {
         Serial.println(precisao);
      }
 
-
      //float distancia_entre;
      //distancia_entre = gps1.distance_between(lat1, long1, lat2, long2);
 
      //float sentido_para;
      //sentido_para = gps1.course_to(lat1, long1, lat2, long2);
+     
   }
 }
