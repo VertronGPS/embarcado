@@ -77,7 +77,7 @@ static unsigned long delayLeGPS = millis();
      
      if ( mensagemSMS == pingAutorizado ) {
         Serial.println("Enviando SMS de Resposta ao ping.");
-        String resposta = "vetrongps\r";
+        String resposta = "vertrongps\r";
         resposta.concat("requisicao:ping\r");
         resposta.concat("resposta:ok");
         enviaSMS(telefoneSMS, resposta);  
@@ -96,9 +96,13 @@ static unsigned long delayLeGPS = millis();
         gps.f_get_position(&flat, &flon, &age);
 
         if ( (flat == TinyGPS::GPS_INVALID_F_ANGLE) || (flon == TinyGPS::GPS_INVALID_F_ANGLE) ) {
-           enviaSMS(telefoneSMS, "GPS Sem Sinal!");
+           Serial.println("Enviando SMS de Resposta: GPS Sem Sinal.");
+           String respostaSinal = "vertrongps\r";
+           respostaSinal.concat("requisicao:getlocation\r");
+           respostaSinal.concat("resposta:gpsfail");          
+           enviaSMS(telefoneSMS, respostaSinal);
         } else {
-           String urlMapa = "vetrongps\r";
+           String urlMapa = "vertrongps\r";
            urlMapa.concat("requisicao:getlocation\r");
            
            urlMapa.concat("resposta:");
