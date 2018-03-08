@@ -1,3 +1,7 @@
+// Codico adaptado.
+// Agredecimentos em especial ao Flavio do chanal Brincando com ideias
+// Link para o canal - https://www.youtube.com/channel/UCcGk83PAQ5aGR7IVlD_cBaw 
+
 #include <SoftwareSerial.h>
 #include <TinyGPS.h>
 
